@@ -1,0 +1,17 @@
+.image-tile {
+    width: -webkit-fill-available;
+}
+
+/* .images-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.col {
+   padding: 15px;
+} */
+
+.grid-item { 
+    width: 200px; 
+}
