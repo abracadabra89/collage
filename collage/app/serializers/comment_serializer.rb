@@ -1,4 +1,4 @@
 class CommentSerializer < ActiveModel::Serializer
   attributes :id, :description
-  has_one :board_id
+  belongs_to :board
 end
