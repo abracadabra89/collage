@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 2019_11_11_161902) do
 
   create_table "boards", force: :cascade do |t|
     t.bigint "user_id"
+    t.string "title"
     t.integer "likes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

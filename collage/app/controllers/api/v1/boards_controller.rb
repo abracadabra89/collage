@@ -4,8 +4,18 @@ class Api::V1::BoardsController < ApplicationController
         render json: boards, include: ['images']
     end
 
-    # def show
-    #     board = Image.find(params[:id])
-    #     render json: board
-    # end
+    def show
+        board = Image.find(params[:id])
+        render json: board, include: ['images']
+    end
+
+    def create
+        new_board = Board.create(board_params)
+    end
+
+    private
+
+    def board_params
+        params.require(:board).permit(:title, :user_id);
+    end
 end

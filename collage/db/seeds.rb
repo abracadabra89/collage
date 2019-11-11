@@ -5,7 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-require 'faker'
 
 User.destroy_all
 Board.destroy_all
@@ -21,11 +20,11 @@ User.create([
 ]);
 
 Board.create([
-    {user_id: User.first.id, likes: 5},
-    {user_id: User.second.id, likes: 2},
-    {user_id: User.third.id, likes: 0},
-    {user_id: User.fourth.id, likes: 100},
-    {user_id: User.fifth.id, likes: 25}
+    {user_id: User.first.id, likes: 5, title: 'Winter'},
+    {user_id: User.second.id, likes: 2, title: 'Summer'},
+    {user_id: User.third.id, likes: 0, title: 'Phones'},
+    {user_id: User.fourth.id, likes: 100, title: 'Coffee'},
+    {user_id: User.fifth.id, likes: 25, title:'Fashion'}
 ])
 
 Comment.create([
