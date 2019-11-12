@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridContainer = document.querySelector('div.grid');
     const searchInput = document.querySelector('input#search-input')
     const body = document.querySelector('body');
-    const searchBarItem = document.querySelector('li.search-bar');
     
     if (currentUser) {
         getImages();
@@ -53,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     async function imageSearch(query){
-        const response = await fetch(`https://api.unsplash.com/search/photos/?client_id=${clientId}&query=${query}`);
+        const response = await fetch(`https://api.unsplash.com/search/photos/?client_id=${clientId}&query=${query}&count=30`);
         const data = await response.json();
         data.results.forEach(image => appendImage(image['urls']['small']));
     };
@@ -68,11 +67,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function appendImage(imageURL) {
         let div = document.createElement('div');
         div.className = 'grid-item'
+        div.style = 'position: relative;'
 
         let img = document.createElement('img');
         img.src = imageURL;
         img.className = 'image'
 
+        let boardDropDown = document.createElement('div');
+        boardDropDown.className = 'btn-group';
+        boardDropDown.style = style= "position: absolute; top: 0px; right: 0px; padding: 15px 15px 0 0"
+        boardDropDown.innerHTML = `<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Save
+            </button>
+            <div class="dropdown-menu">
+                ...
+            </div>`
+
+        div.appendChild(boardDropDown);
         div.appendChild(img);
         gridContainer.appendChild(div);
     };
@@ -148,6 +159,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
 
+    });
+
+    gridContainer.addEventListener('mouseover', function(e){
+        switch (e.target.className) {
+            case 'image':
+                console.log('image')
+                break;
+        
+            default:
+                break;
+        }
     })
 
 

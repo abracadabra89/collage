@@ -1,0 +1,37 @@
+.search-bar-container {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#search-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0;
+}
+
+.search-bar-item {
+    padding: 25px 40px;
+}
+
+.search-bar-item:hover {
+    background: grey;
+    color: white;
+    cursor: pointer;
+}
+
+
+.grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.grid-item {
+    padding: 5px;
+}
+
+
+
