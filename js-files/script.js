@@ -1,26 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let currentUser;
+
+    // DOM Elements
     const gridContainer = document.querySelector('div.grid');
     const searchInput = document.querySelector('input#search-input')
     const body = document.querySelector('body');
-    const searchButton = document.querySelector('button#search-btn');
+    const searchBarItem = document.querySelector('li.search-bar');
+    
+    if (currentUser) {
+        getImages();
+    } else {
+        logIn();
+    }
 
+    // Unsplash API Creds
     const clientId = 'f24aca1bf867d565f88e453b6a06d80aeae7c6705d250604d41df7e710b834ee';
 
-    getImages();
+    // User Data
+    async function logInUser(username){
+        const response = await fetch(`http://localhost:3000/api/v1/users`);
+        const data = await response.json();
+        let userData = data.filter(data => data.username === username);
+        if (userData) {
+            currentUser = userData[0]['id'];
+            emptyContainer()
+            getImages()
+        } else {
+            logInError();
+        }
+    }
+
+    function logIn(){
+        let logInForm = document.createElement('div');
+        logInForm.innerHTML = `<form>
+            <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username-login" placeholder="Username">
+            </div>
+            <div class="form-group">
+            <button id="login" type="submit" class="btn btn-primary">Log In</button>
+            </div>
+            </form>`
+
+        gridContainer.appendChild(logInForm);
+    }
+    
+    // Loading DOM Content
     async function getImages(){
-        // const response = await fetch(`https://api.unsplash.com/photos/?client_id=${clientId}`);
         const response = await fetch(`https://api.unsplash.com/photos/random/?client_id=${clientId}&count=30`);
         const data = await response.json();
         data.forEach(image => appendImage(image['urls']['small']));
-        // console.log(data)
-    };
-
-    currentUser()
-    let currentUser;
-    async function currentUser(){
-        const response = await fetch(`http://localhost:3000/api/v1/users`);
-        const data = await response.json();
-        currentUser = data[data.length - 1]['id'];
     };
 
     async function imageSearch(query){
@@ -35,28 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         data.boards.forEach(board => appendBoard(board));
     };
 
-    async function newBoard(){
-        fetch(`http://localhost:3000/api/v1/boards`, {
-            method: "P"
-        })
-        
-    };
-
-    // async function newBoard(){
-    //     const response = await fetch(`http://localhost:3000/api/v1/users/:id`);
-    //     const data = await response.json();
-    //     // data.boards.forEach(board => (board['images'].forEach(image => appendImage(image.link))));
-    //     data.boards.forEach(board => appendBoard(board));
-    // }
-
-    // async function showBoard(){
-    //     const response = await fetch(`http://localhost:3000/api/v1/users/:id`);
-    //     const data = await response.json();
-    //     data.boards.forEach(board => console.log(board['images']));
-    // }
-
-
-
+    // Append Images to Page
     function appendImage(imageURL) {
         let div = document.createElement('div');
         div.className = 'grid-item'
@@ -104,7 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault;
         e.stopPropagation;
 
-        console.log(e.target)
+        if (e.target.className === 'search-bar-item'){
+            let search = e.target.innerText;
+            emptyContainer();
+            imageSearch(search);
+        }
 
         switch (e.target.id) {
             case 'search-btn':
@@ -125,6 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                      
             case 'new-board':
                 getImages();
+                break;
+     
+            case 'login':
+                let username = document.querySelector('#username-login').value;
+                logInUser(username);
                 break;
         
             default:
