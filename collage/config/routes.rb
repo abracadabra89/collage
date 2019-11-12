@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       resources :comments
       resources :images
       resources :boards
-      resources :users, param: :_username
+      resources :users
     end
   end
 

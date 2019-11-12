@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentUser;
+    let boardTitles = [];
 
     // DOM Elements
     const gridContainer = document.querySelector('div.grid');
@@ -22,8 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let userData = data.filter(data => data.username === username);
         if (userData) {
             currentUser = userData[0]['id'];
-            emptyContainer()
-            getImages()
+            emptyContainer();
+            getImages();
+            getBoardTitles();
         } else {
             logInError();
         }
@@ -63,29 +65,34 @@ document.addEventListener('DOMContentLoaded', () => {
         data.boards.forEach(board => appendBoard(board));
     };
 
+    async function getBoardTitles(){
+        const response = await fetch(`http://localhost:3000/api/v1/users/${currentUser}`);
+        const data = await response.json();
+        data.boards.forEach(board => boardTitles.push(board.title));
+    };
+
     // Append Images to Page
     function appendImage(imageURL) {
-        let div = document.createElement('div');
-        div.className = 'grid-item'
-        div.style = 'position: relative;'
+        let imageTile = document.createElement('div');
+        imageTile.className = 'grid-item'
+        imageTile.style = 'position: relative;'
 
         let img = document.createElement('img');
         img.src = imageURL;
         img.className = 'image'
 
-        let boardDropDown = document.createElement('div');
-        boardDropDown.className = 'btn-group';
-        boardDropDown.style = style= "position: absolute; top: 0px; right: 0px; padding: 15px 15px 0 0"
-        boardDropDown.innerHTML = `<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Save
-            </button>
-            <div class="dropdown-menu">
-                ...
-            </div>`
+        let dropDown = document.createElement('div');
+        dropDown.className = 'drop-down';
+        dropDown.style = "position: absolute; top: 0px; right: 0px; padding: 15px 15px 0 0"
+        dropDown.innerHTML = `<button class="drop-down-button" type="button">Save</button>`
 
-        div.appendChild(boardDropDown);
-        div.appendChild(img);
-        gridContainer.appendChild(div);
+        let dropDownMenu = document.createElement('div');
+        dropDownMenu.class = 'drop-down-menu';        
+
+        dropDown.appendChild(dropDownMenu)
+        imageTile.appendChild(dropDown);
+        imageTile.appendChild(img);
+        gridContainer.appendChild(imageTile);
     };
 
     function boardPage() {
@@ -127,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let search = e.target.innerText;
             emptyContainer();
             imageSearch(search);
+        } else if (e.target.className === 'drop-down-button'){
+            console.log('button')
         }
 
         switch (e.target.id) {
@@ -160,17 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     });
-
-    gridContainer.addEventListener('mouseover', function(e){
-        switch (e.target.className) {
-            case 'image':
-                console.log('image')
-                break;
-        
-            default:
-                break;
-        }
-    })
 
 
 });
