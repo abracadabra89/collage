@@ -13,9 +13,14 @@ class Api::V1::BoardsController < ApplicationController
         new_board = Board.create(board_params)
     end
 
+    def update
+        board = Board.find(params[:id])
+        board.update(board_params)
+    end
+
     private
 
     def board_params
-        params.require(:board).permit(:title, :user_id);
+        params.require(:board).permit(:title, :user_id, :likes);
     end
 end
