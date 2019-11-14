@@ -128,12 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Appends each board to board index page
     function appendBoard(board){
         let defaultImage = getDefaultBoardImage(board);
-
         let boardDiv = document.createElement('div');
-         let boardComments = document.createElement('div')
-         boardComments.className = 'board-comment';
-        
-
+        let boardComments = document.createElement('div')
+        boardComments.className = 'board-comment';
         
         boardDiv.className = 'card';
         boardDiv.style = 'width: 18rem;';
@@ -153,24 +150,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button id="new-comment-submit"  type="submit" class="btn btn-sm btn-outline-secondary">Comment</button>
             </div>
         </form>`;
+
         appendComments(board, boardComments);
         boardDiv.appendChild(boardComments);
-
         gridContainer.appendChild(boardDiv);
     };
 
+    //adding comments to the board
     function appendComments(board, boardComments){
         board.comments.forEach(comment => {
            let commentElem = document.createElement('p')
            commentElem.innerText = comment.description;
-           boardComments.append(commentElem);
-
-
-        
+           boardComments.append(commentElem);   
     })
 }
-
-       
 
     function appendBoardImages(board){
         let boardContainer = document.createElement('div');
@@ -183,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="board-images"></div>`
 
         gridContainer.appendChild(boardContainer);
-
         board.images.forEach(image => appendImage(image.link))
     };
 
@@ -203,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </form>`;
         
         gridContainer.appendChild(newBoardForm);
-
         if (hasBoards()) {
             myBoards().forEach(board => appendBoard(board));
         };
@@ -211,42 +202,20 @@ document.addEventListener('DOMContentLoaded', () => {
         let submitButton = document.querySelector('#new-comment-submit')
         submitButton.addEventListener('click', function(e){
             e.preventDefault();
-            // console.log()
-
             let commentInput = document.querySelector('#new-comment').value
             let boardDiv = e.target.closest('.card')
             let boardId = boardDiv.dataset.id;
             let obj = {board_id:boardId, description:commentInput};
-            
-            
-            
+                 
             fetch('http://localhost:3000/api/v1/comments', {
                 method: 'POST',
                 headers: {
                 'content-type': 'application/json'
                 },
                 body: JSON.stringify(obj)
-            })
-            // .then(response = response.json())
-           
-            
-        
-
-        
-            
-
+            }).then(addLatestComment(obj))
         })
     }
-
-
-
-
-    
-
-
-
-
-
 
     // Board show page
     function showBoard(boardId){
@@ -333,6 +302,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     });
+
+    function addLatestComment(obj) {
+        console.log(obj)
+        let commentSpace = document.createElement('p');
+        commentSpace.innerText = obj.description;
+        boardComments = document.querySelector('.board-comment');
+        boardComments.appendChild(commentSpace);
+    }
 
 
 });
