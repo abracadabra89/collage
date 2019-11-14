@@ -64,11 +64,26 @@ document.addEventListener('DOMContentLoaded', () => {
         appendBoardImages(board);
     };
 
+    async function getBoards(){
+        let userId = currentUser.id
+        const response = await fetch(`http://localhost:3000/api/v1/users/${userId}`);
+        const user = await response.json();
+        user.boards.forEach(board => boardDropdown(board.id, board.title))
+    }
+
+    function boardDropdown(id, title){
+        // console.log(id, title)
+        let boardDropdown = document.getElementById('boardDropdown');
+        let option = document.createElement('option');
+        option.innerText = title;
+        option.dataset.id = id;
+
+        boardDropdown.appendChild(option);
+    }
+
     // Show page for an image
     function showImage(imageDiv){
-        // console.log(imageDiv)
         let image = imageDiv.lastElementChild
-        
         gridContainer.appendChild(image);
 
         let imgBoardForm = document.createElement('form');
@@ -76,16 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
         imgBoardForm.innerHTML = 
             `<div class="form-group">
                 <label for="board_id">Your Boards:</label>
-                <select class="form-control" id="boardDropdown">
-                <option data-id=6>Winter</option>
-                <option data-id=9>Coffee</option>
-            </select>
+                <select class="form-control" id="boardDropdown"></select>
             </div>
             <input type="hidden" id="title" name="title" value=${imageDiv.dataset.title}>
             <input type="hidden" id="description" name="description" value=${imageDiv.dataset.description}>
             <button id="add" type="submit" class="btn btn-primary">Add</button>`
-
+        
         gridContainer.appendChild(imgBoardForm);
+        getBoards();
     }
 
     // Append Images to Page
@@ -179,7 +192,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         gridContainer.appendChild(boardContainer);
 
-        board.images.forEach(image => appendImage(image.link))
+        board.images.forEach(function(image){
+            let imageContainer = document.createElement('div');
+            imageContainer.className = 'grid-item'
+            imageContainer.dataset.title = image.title;
+            imageContainer.dataset.description = image.description;
+
+            let img = document.createElement('img');
+            img.src = image.link;
+            img.className = 'board-image'
+
+            imageContainer.appendChild(img);
+            gridContainer.appendChild(imageContainer);
+        })
     };
 
     // Constructs board index page (including form for new boards)
