@@ -42,3 +42,4 @@ Image.create([
     {board_id: Board.fourth.id, title: "Trees and a River", description: "Lots of trees and water", link: "https://images.unsplash.com/photo-1527489377706-5bf97e608852?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2027&q=80"},
     {board_id: Board.fifth.id, title: "Trees and a River", description: "Lots of trees and water", link: "https://images.unsplash.com/photo-1527489377706-5bf97e608852?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2027&q=80"}
 ])
+
