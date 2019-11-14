@@ -1,6 +1,7 @@
 .search-bar-container {
     margin-left: 50px;
     margin-right: 50px;
+    font-family: "Courier New";
 }
 
 #search-bar {
@@ -9,17 +10,32 @@
     justify-content: center;
     list-style-type: none;
     padding: 0;
+    font-family: "Courier New";
 }
 
 .search-bar-item {
     padding: 25px 40px;
+    font-family: "Courier New";
 }
 
 .search-bar-item:hover {
-    background: grey;
-    color: white;
+    background: #e3f2fd;
+    color: grey;
     cursor: pointer;
+    /* box-shadow: inset 0 0 0 25px white; */
+     border-radius:1%; 
+    background-color:#e3f2fd;
+    font-family: "Courier New";
+
 }
+
+
+
+  .search-bar-item:active {
+    background-color: #333;
+    color: #eee;
+    font-family: "Courier New";
+  }
 
 
 .grid {
@@ -27,16 +43,76 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    font-family: "Courier New";
+    
+
 }
 
 .grid-item {
     padding: 5px;
+    justify-content: center;
     cursor: pointer;
+    font-family: "Courier New";
 }
 
 .board-card {
     cursor: pointer;
+    font-family: "Courier New";
 }
+ 
+.nav-link {
+    font-size: 20px;
+    font-family: "Courier New";
+   
+}
+
+
+.form-inline{
+    font-family: "Courier New";
+}
+
+.navbar {
+    justify-content: center;
+    /* background-color: rgb(250, 233, 233) */
+}
+
+body{ 
+    background-color: rgb(250, 233, 233);
+} 
+
+
+
+.form-group {
+    justify-content: center;
+    padding: 20px;
+}
+
+.card-text {
+    cursor: pointer;
+    justify-content: center;
+}
+.h3 {
+    font-style: italic;
+}
+.board-container {
+    justify-content: center;
+    padding: 20px;
+}
+
+.div{
+    justify-content: center;
+    padding: 20px;
+
+}
+
+
+
+
+
+
+
+
+
 
 
 

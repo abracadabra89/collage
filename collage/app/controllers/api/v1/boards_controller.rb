@@ -1,12 +1,12 @@
 class Api::V1::BoardsController < ApplicationController
     def index
         boards = Board.all
-        render json: boards, include: ['images']
+        render json: boards, include: ['images' ,'comments'] 
     end
 
     def show
         board = Board.find(params[:id])
-        render json: board, include: ['images']
+        render json: board, include: ['images', 'comments'] 
     end
 
     def create

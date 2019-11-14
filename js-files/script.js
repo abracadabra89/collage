@@ -30,12 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function logIn(){
         let logInForm = document.createElement('div');
         logInForm.innerHTML = `<form>
-            <div class="form-group">
-            <label for="username">Username</label>
+            <div class="form-group" style="text-align:center">
+            <label for="username"></label>
             <input type="text" class="form-control" id="username-login" placeholder="Username">
             </div>
-            <div class="form-group">
-            <button id="login" type="submit" class="btn btn-primary">Log In</button>
+            <div class="form-group" style="text-align:center">
+            <button id="login" type="submit" class="btn btn-sm btn-outline-secondary">Log In</button>
             </div>
             </form>`
 
@@ -62,13 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
         appendBoardImages(board);
     };
 
+
     // Show 'page' for an image
     function showImage(img){
         gridContainer.appendChild(img);
 
         let addToBoard = document.createElement('form');
-        addToBoard.innerHTML = 
-            `<div class="form-group">
+        addToBoard.innerHTML = `<form>
+            <div class="form-group" style="text-align:center">
                 <label for="exampleFormControlSelect1">Your Boards:</label>
                 <select class="form-control" id="boardDropdown">
                 <option>1</option>
@@ -77,9 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option>4</option>
                 <option>5</option>
                 </select>
+                <br>
+            <button type="submit" class="btn btn-secondary" style="text-align:center">Add</button>
             </div>
-            <button type="submit" class="btn btn-primary">Add</button>`
-
+            </form>`
         gridContainer.appendChild(addToBoard);
     }
 
@@ -128,6 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let defaultImage = getDefaultBoardImage(board);
 
         let boardDiv = document.createElement('div');
+         let boardComments = document.createElement('div')
+         boardComments.className = 'board-comment';
+        
+
+        
         boardDiv.className = 'card';
         boardDiv.style = 'width: 18rem;';
         boardDiv.dataset.id = board['id'];
@@ -135,19 +142,44 @@ document.addEventListener('DOMContentLoaded', () => {
             `<img src="${defaultImage}" class="card-img-top" alt="...">
             <div class="card-body">
                 <p class="card-text">${board['title']}</p>
-            </div>`;
+            </div>
+            <form>
+            <div class="form-group" style="text-align:center">
+                <label for="formGroupExampleInput">Comment:</label>
+                <input type="text" class="form-control" id="new-comment" placeholder="Comment">
+            </div>
+            <div class="form-group" style="text-align:center">
+                <input type="hidden" id="userId" name="user_id" value: ${currentUser} >
+                <button id="new-comment-submit"  type="submit" class="btn btn-sm btn-outline-secondary">Comment</button>
+            </div>
+        </form>`;
+        appendComments(board, boardComments);
+        boardDiv.appendChild(boardComments);
 
         gridContainer.appendChild(boardDiv);
     };
+
+    function appendComments(board, boardComments){
+        board.comments.forEach(comment => {
+           let commentElem = document.createElement('p')
+           commentElem.innerText = comment.description;
+           boardComments.append(commentElem);
+
+
+        
+    })
+}
+
+       
 
     function appendBoardImages(board){
         let boardContainer = document.createElement('div');
         boardContainer.className = 'board-container'
         boardContainer.innerHTML = 
-            `<h2 class="board-title">${board.title}</h2>
+            `<h3 class="board-title">${board.title}</h3>
             <div class="board-likes">
-                <div id="likes">${board.likes} likes<button data-id="${board.id}">Like</button></div>
-            </div>
+                <div id="likes">${board.likes} likes  <button type="submit" data-id="${board.id} class="btn btn-sm btn-outline-secondary" >Like</button></div>
+                </div>
             <div class="board-images"></div>`
 
         gridContainer.appendChild(boardContainer);
@@ -160,13 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let newBoardForm = document.createElement('div');
         newBoardForm.innerHTML = 
             `<form>
-                <div class="form-group">
+                <div class="form-group" style="text-align:center">
                     <label for="formGroupExampleInput">Title:</label>
                     <input type="text" class="form-control" id="new-board-title" placeholder="Board Title">
                 </div>
-                <div class="form-group">
-                    <input type="hidden" id="userId" name="user_id" value: ${currentUser}>
-                    <button id="new-board-submit" type="submit" class="btn btn-primary">Create</button>
+                <div class="form-group" style="text-align:center">
+                    <input type="hidden" id="userId" name="user_id" value: ${currentUser} >
+                    <button id="new-board-submit" type="submit" class="btn btn-sm btn-outline-secondary">Create</button>
                 </div>
             </form>`;
         
@@ -175,12 +207,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hasBoards()) {
             myBoards().forEach(board => appendBoard(board));
         };
-    };
+        
+        let submitButton = document.querySelector('#new-comment-submit')
+        submitButton.addEventListener('click', function(e){
+            e.preventDefault();
+            // console.log()
+
+            let commentInput = document.querySelector('#new-comment').value
+            let boardDiv = e.target.closest('.card')
+            let boardId = boardDiv.dataset.id;
+            let obj = {board_id:boardId, description:commentInput};
+            
+            
+            
+            fetch('http://localhost:3000/api/v1/comments', {
+                method: 'POST',
+                headers: {
+                'content-type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            })
+            // .then(response = response.json())
+           
+            
+        
+
+        
+            
+
+        })
+    }
+
+
+
+
+    
+
+
+
+
+
 
     // Board show page
-    // function showBoard(boardId){
-    //     getBoard(boardId);
-    // }
+    function showBoard(boardId){
+        getBoard(boardId);
+    }
 
     // Empty the DOM
     function emptyContainer(){
@@ -218,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
              case 'card-img-top':
                 boardId = e.target.parentNode.dataset.id;
                 emptyContainer();
-                getBoard(boardId);
+                createComment(boardId);
                 break;
 
              case 'card-body':
@@ -241,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 emptyContainer();
                 boardPage();
                 break;
+
                 
             case 'homepage':
                 emptyContainer();
@@ -264,3 +336,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
+
+
+
+
+
+
+
+
+
